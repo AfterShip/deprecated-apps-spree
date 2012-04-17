@@ -1,61 +1,46 @@
-spree-aftership
+spree_aftership
 ==============
 
-Introduction goes here.
+Spree Extension for AfterShip.
+
+This extension helps merchant who using Spree to auto import tracking number to AfterShip.
+
+About AfterShip
+==============
+
+AfterShip provides an automated way for online merchants to track packages and send their customers delivery status notifications. Customers no longer need to deal with tracking numbers and track packages on their own. With AfterShip, online merchants extend their customer service after the point of purchase by keeping their customers actively informed, while saving time and money by reducing customers’ questions about the status of their purchase delivery. 
 
 Installation
 ============
 
 ###1. Add the following line to your application's Gemfile
 
-     gem "spree_paypal_express", :git => "git://github.com/spree/spree_paypal_express.git"
-
-**Note:** The :git option is only required for the edge version, and can be removed to used the released gem.
+     gem "spree_aftership", :git => "git://github.com:dantetwc/spree_aftership.git"
 
 ###2. Run bundler
 
       bundle install
 
-###3. Copy assets / migrations
+###3. Copy initializer
 
-      rails g spree_paypal_express:install
+      rails g spree_aftership:install
 
 Configuration
 =============
 ###1. Before you begin
+  
+You'll need to have a AfterShip account [http://www.aftership.com](http://www.aftership.com).
 
-You'll need to have a Paypal developer account (developer.paypal.com) and both buyer and seller test accounts.
+	
 
-**Tip:** these are sandbox only, so use email addresses and passwords that are easy to  remember, e.g. buyer@example.com and seller@example.com.
+###2. Setup the API Key
+  
+Log in to AfterShip and copy the consumer key and consumer secret to initializers/aftership.rb
 
-Your sandbox credentials are available from the API Credentials link.
+	Spree::Aftership::Config[:consumer_key] =  "YOUR_CONSUMER_KEY"
+	Spree::Aftership::Config[:consumer_secret] = "YOUR_CONSUMER_SECRET"
+	
 
-###2. Setup the Payment Method
+---------------------------------------
 
-Log in as an admin and add a new **Payment Method** (under Configuration), using following details:
-
-**Name:** Paypal Express
-
-**Environment:** Development (or what ever environment you prefer)
-
-**Active:** Yes
-
-**Provider:** Spree::BillingIntegration::PaypalExpress
-
-Click **Create* , and now add your credentials in the screen that follows:
-
-**Review:** unchecked [1]
-
-**Signature:** API signature from your paypal seller test account
-
-**Server:** test (for Development or live for Production)
-
-**Test Mode:** checked (or unchecked for Production)
-
-**Password:** API Password from your paypal seller test account
-
-**Login:** API Username from your paypal seller test account (care to use the API Username and not the Test Account address)
-
-Click **Update**
-
-Copyright (c) 2012 [name of extension creator], released under the New BSD License
+Copyright (c) 2012 AfterShip Ltd. , released under the New BSD License
