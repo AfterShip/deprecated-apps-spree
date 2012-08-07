@@ -15,7 +15,7 @@ Installation
 
 ###1. Add the following line to your application's Gemfile
 
-     gem "spree_aftership", :git => "git://github.com/AfterShip/spree_aftership.git"
+     gem "spree_aftership", :git => "git://github.com/AfterShip/spree_aftership.git", :branch => 'v2'
 
 ###2. Run bundler
 
@@ -37,8 +37,7 @@ You'll need to have a AfterShip account [http://www.aftership.com](http://www.af
   
 Log in to AfterShip. Go to "Settings" page and select "Profile" tab, then copy the consumer key and consumer to initializers/aftership.rb
 
-	Spree::Aftership::Config[:consumer_key] =  "YOUR_CONSUMER_KEY"
-	Spree::Aftership::Config[:consumer_secret] = "YOUR_CONSUMER_SECRET"
+	Spree::Aftership::Config[:api_key] =  "YOUR_API_KEY"
 	
 
 ---------------------------------------
