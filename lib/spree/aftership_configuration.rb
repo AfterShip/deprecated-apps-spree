@@ -1,6 +1,5 @@
 module Spree
   class AftershipConfiguration < Preferences::Configuration
-    preference :consumer_key, :string, :default => ""
-    preference :consumer_secret, :string, :default => ""
+    preference :api_key, :string, :default => ""
   end
 end

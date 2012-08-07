@@ -8,7 +8,7 @@ class AftershipTracking < ActiveRecord::Base
 
   def self.add_to_aftership
     AftershipTracking.where(:add_to_aftership => nil).each do |tracking|
-      post_data = {"consumer_key" => Spree::Aftership::Config[:consumer_key], "consumer_secret" => Spree::Aftership::Config[:consumer_secret], "tracking_number" => tracking.tracking, "email" => tracking.email, "title" => "Spree Order: #{tracking.order_number}"}
+      post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking.tracking, "email" => tracking.email, "source" => "Spree Order: #{tracking.order_number}","title"=>"#{tracking.order_number}"}
 
       begin
         url = URI.parse("https://www.aftership.com/en/api/add-tracking/")
@@ -30,5 +30,6 @@ class AftershipTracking < ActiveRecord::Base
       end
     end
     AftershipTracking.where("add_to_aftership <= ?", 1.month.ago).destroy_all
+
   end
 end
