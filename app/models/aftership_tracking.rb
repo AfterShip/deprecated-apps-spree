@@ -8,10 +8,10 @@ class AftershipTracking < ActiveRecord::Base
 
   def self.add_to_aftership
     AftershipTracking.where(:add_to_aftership => nil).each do |tracking|
-      post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking.tracking, "email" => tracking.email, "source" => "Spree Order: #{tracking.order_number}","title"=>"#{tracking.order_number}"}
+      post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking.tracking, "emails" => [tracking.email], "source" => "Spree Order: #{tracking.order_number}","title"=>"#{tracking.order_number}"}
 
       begin
-        url = URI.parse("https://www.aftership.com/en/api/add-tracking/")
+        url = URI.parse("https://api.aftership.com/v1/trackings")
         req = Net::HTTP::Post.new(url.path)
         req.set_form_data(post_data)
 
