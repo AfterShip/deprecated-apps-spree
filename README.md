@@ -35,9 +35,11 @@ You'll need to have a AfterShip account [http://www.aftership.com](http://www.af
 
 ###2. Setup the API Key
   
-Log in to AfterShip. Go to "Settings" page and select "Profile" tab, then copy the consumer key and consumer to initializers/aftership.rb
+You can retrieve your api key at [https://www.aftership.com/connect/spree](https://www.aftership.com/connect/spree), then copy the api key to config/initializers/aftership.rb
 
 	Spree::Aftership::Config[:api_key] =  "YOUR_API_KEY"
+
+Replace "YOUR_API_KEY" to your AfterShip api key.
 	
 
 ---------------------------------------
