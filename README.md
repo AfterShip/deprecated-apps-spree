@@ -15,7 +15,7 @@ Installation
 
 ###1. Add the following line to your application's Gemfile
 
-     gem "spree_aftership", :git => "git://github.com/AfterShip/spree_aftership.git", :branch => 'v2'
+     gem "spree_aftership", :git => "git://github.com/AfterShip/spree_aftership.git"
 
 ###2. Run bundler
 
