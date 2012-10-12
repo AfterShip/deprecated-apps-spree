@@ -4,10 +4,10 @@ require 'net/https'
 require 'cgi'
 
 class AftershipTracking < ActiveRecord::Base
-  attr_accessible :tracking, :email, :order_number, :add_to_aftership
+  attr_accessible :tracking, :email, :order_number, :add_to_aftership_at
 
   def exec_add_to_aftership
-    post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking, "emails" => [email], "source" => "Spree Order: #{order_number}","title"=>"#{order_number}"}
+    post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking, "emails" => [email], "source" => "Spree Order: #{order_number}", "title" => "#{order_number}"}
     begin
       url = URI.parse("https://api.aftership.com/v1/trackings")
       req = Net::HTTP::Post.new(url.path)
@@ -17,11 +17,18 @@ class AftershipTracking < ActiveRecord::Base
       sock.use_ssl = true
       res = sock.start { |http| http.request(req) }
 
-      case res
-        when Net::HTTPOK
-          tracking.update_attribute(:add_to_aftership, Time.now)
-        else
-          logger.error "Unable to add tracking number to AfterShip! #{res.inspect}"
+      debugger
+
+      if res.is_a?(Net::HTTPCreated)
+        logger.info "Tracking added to AfterShip"
+        self.update_attributes(:add_to_aftership_at => Time.now)
+      elsif  res.is_a?(Net::HTTPClientError)
+        if res.code == "422"
+          logger.error "AfterShip responded with Unprocessable Entity, most likely unsupported tracking numbers"
+          self.update_attributes(:add_to_aftership_at => Time.now)
+        end
+      else
+        logger.error "Unable to add tracking number to AfterShip!"
       end
     rescue Exception => e
       logger.error "AfterShip error:#{e.message}"
@@ -37,9 +44,9 @@ class AftershipTracking < ActiveRecord::Base
   end
 
   def self.add_to_aftership
-    AftershipTracking.where(:add_to_aftership => nil).each do |tracking|
+    AftershipTracking.where(:add_to_aftership_at => nil).each do |tracking|
       tracking.add_to_aftership
     end
-    AftershipTracking.where("add_to_aftership <= ?", 1.month.ago).destroy_all
+    AftershipTracking.where("add_to_aftership_at <= ?", 1.month.ago).destroy_all
   end
 end
