@@ -17,8 +17,6 @@ class AftershipTracking < ActiveRecord::Base
       sock.use_ssl = true
       res = sock.start { |http| http.request(req) }
 
-      debugger
-
       if res.is_a?(Net::HTTPCreated)
         logger.info "Tracking added to AfterShip"
         self.update_attributes(:add_to_aftership_at => Time.now)
