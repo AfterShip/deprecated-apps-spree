@@ -19,7 +19,6 @@ class AftershipTracking < ActiveRecord::Base
       request.body = post_body_from_hash(post_data)
       response = HTTPI.post(request)
 
-
       if response.code == 201
         logger.info "Tracking added to AfterShip"
         self.update_attributes(:add_to_aftership_at => Time.now)
