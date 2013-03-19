@@ -1,37 +1,39 @@
-require 'uri'
-require 'net/http'
-require 'net/https'
+require 'httpi'
 require 'cgi'
 
 class AftershipTracking < ActiveRecord::Base
   attr_accessible :tracking, :email, :order_number, :add_to_aftership_at
 
   def exec_add_to_aftership
-    post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking, "emails" => [email], "source" => "Spree Order: #{order_number}", "title" => "#{order_number}"}
+
+    # Use em-http-request when available.
+    if defined?(EventMachine::HttpRequest)
+      HTTPI.adapter = :em_http
+    end
+
     begin
-      url = URI.parse("https://api.aftership.com/v1/trackings")
-      req = Net::HTTP::Post.new(url.path)
-      req.set_form_data(post_data)
 
-      sock = Net::HTTP.new(url.host, url.port)
-      sock.use_ssl = true
-      res = sock.start { |http| http.request(req) }
+      post_data = {"api_key" => Spree::Aftership::Config[:api_key], "tracking_number" => tracking, "emails" => [email], "source" => "Spree Order: #{order_number}", "title" => order_number}
 
-      debugger
+      request = HTTPI::Request.new("https://api.aftership.com/v1/trackings")
+      request.body = post_body_from_hash(post_data)
+      response = HTTPI.post(request)
 
-      if res.is_a?(Net::HTTPCreated)
+
+      if response.code == 201
         logger.info "Tracking added to AfterShip"
         self.update_attributes(:add_to_aftership_at => Time.now)
-      elsif  res.is_a?(Net::HTTPClientError)
-        if res.code == "422"
-          logger.error "AfterShip responded with Unprocessable Entity, most likely unsupported tracking numbers"
-          self.update_attributes(:add_to_aftership_at => Time.now)
-        end
+      elsif response.code == 422
+        logger.error "AfterShip responded with Unprocessable Entity, most likely unsupported tracking numbers"
+        self.update_attributes(:add_to_aftership_at => Time.now)
       else
-        logger.error "Unable to add tracking number to AfterShip!"
+        logger.error "Unable to add tracking number to AfterShip! Response Code: #{response.code}"
       end
+
+
     rescue Exception => e
-      logger.error "AfterShip error:#{e.message}"
+      logger.error "AfterShip Error #{e.message}"
+      logger.error "#{e.backtrace}"
     end
   end
 
@@ -49,4 +51,20 @@ class AftershipTracking < ActiveRecord::Base
     end
     AftershipTracking.where("add_to_aftership_at <= ?", 1.month.ago).destroy_all
   end
+
+  private
+
+  def post_body_from_hash(post_data)
+    if post_data.is_a?(Hash)
+      return post_data.map { |k, v|
+        if v.instance_of?(Array)
+          v.map { |e| "#{CGI.escape(k.to_s)}[]=#{CGI.escape(e.to_s)}" }.join("&")
+        else
+          "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"
+        end
+      }.join("&")
+    end
+    nil
+  end
+
 end

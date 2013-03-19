@@ -21,9 +21,6 @@ Installation
 
       bundle install
 
-###3. Copy initializer
-
-      rails g spree_aftership:install
 
 Configuration
 =============
@@ -40,8 +37,20 @@ You can retrieve your api key at [https://www.aftership.com/connect/spree](https
 	Spree::Aftership::Config[:api_key] =  "YOUR_API_KEY"
 
 Replace "YOUR_API_KEY" to your AfterShip api key.
+
+###3. Copy initializer
+
+      rails g spree_aftership:install
+
+
+###4. Install em-http-request to increase performance(Optional)
+Add following line to your gemfile
+
+	gem "em-http-request"
+	
+em-http-request is an asynchronous HTTP interface so that the API requests will not block the http server.
 	
 
 ---------------------------------------
 
-Copyright (c) 2012 AfterShip Ltd. , released under the New BSD License
+Copyright (c) 2013 AfterShip Ltd. , released under the New BSD License
