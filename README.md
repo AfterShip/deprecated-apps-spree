@@ -1,55 +1,34 @@
 spree_aftership
 ==============
+This free extension automatically import any new tracking numbers from your Spree store to AfterShip.
 
-Spree Extension for AfterShip.
-
-This extension helps merchant who using Spree to auto import tracking number to AfterShip.
-
-About AfterShip
+Key Features
 ==============
+- Auto import and track all your shipments - UPS, USPS, Fedex & [100+ courirs](https://www.aftership.com/courier) (Free)
+- Notify customers when in transit, out for delivery, delivered or exceptions ([Premium](https://www.aftership.com/premium))
+- Find out if shipments are delivered on time, and reduce enquiries about order status.
 
-AfterShip provides an automated way for online merchants to track packages and send their customers delivery status notifications. Customers no longer need to deal with tracking numbers and track packages on their own. With AfterShip, online merchants extend their customer service after the point of purchase by keeping their customers actively informed, while saving time and money by reducing customers’ questions about the status of their purchase delivery. 
-
-Installation
+Installation (5 mins) 
 ============
+1. [Sign up AfterShip account for FREE](https://www.aftership.com/signup)
+2. Go to “apps” and add “Spree Connector v2”
+3. Login to your Spree store, and copy Spree API key at `Users > Edit`, and make sure the user has an `Admin` role. [Finding Spree API](https://aftership.uservoice.com/knowledgebase/articles/238182-finding-spree-api-credentials).
+4. Input your store domain and API key, and click connect.
+5. AfterShip will automatically import shipments created at Magento every 3 hours.
 
-###1. Add the following line to your application's Gemfile
+Description
+============
+Shipments imported to your AfterShip account will be matched with the correct couriers and tracked automatically for free at AfterShip. Each free account comes with a Dashboard to monitor the current statuses of all shipments. You can also filter your shipments by dates, statuses, couriers and destination. Find out if all your shipments are delivered on time and discover any exceptions.
 
-     gem "spree_aftership", :git => "git://github.com/AfterShip/spree_aftership.git"
+Upgrade to [Premium](https://www.aftership.com/premium) to send out delivery notifications to customers or yourself. Your choice of notification triggers - In transit, Out for delivery, Delivered, Failed delivery attempt or Exceptions. Use your own email to send out notifications, and customize messages to add store logo, URL, a tracking link to get more returned customers after shipping! 
 
-###2. Run bundler
-
-      bundle install
-
-
-Configuration
-=============
-###1. Before you begin
-  
-You'll need to have a AfterShip account [http://www.aftership.com](http://www.aftership.com).
-
-	
-
-###2. Setup the API Key
-  
-You can retrieve your api key at [https://www.aftership.com/connect/spree](https://www.aftership.com/connect/spree), then copy the api key to config/initializers/aftership.rb
-
-	Spree::Aftership::Config[:api_key] =  "YOUR_API_KEY"
-
-Replace "YOUR_API_KEY" to your AfterShip api key.
-
-###3. Copy initializer
-
-      rails g spree_aftership:install
-
-
-###4. Install em-http-request to increase performance(Optional)
-Add following line to your gemfile
-
-	gem "em-http-request"
-	
-em-http-request is an asynchronous HTTP interface so that the API requests will not block the http server.
-	
+Related topics
+============
+- [Premium account pricing](https://www.aftership.com/premium)
+- [List of supported couriers](https://www.aftership.com/courier)
+- [Free vs Premium](https://www.aftership.com/free-vs-premium)
+- [SMS Charges](https://www.aftership.com/sms-pricing)
+- [Isn’t my store or courier sending notifications already?](https://aftership.uservoice.com/knowledgebase/articles/169634-isn-t-my-store-or-courier-sending-notifications-al)
 
 ---------------------------------------
 
