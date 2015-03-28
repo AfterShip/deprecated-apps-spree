@@ -1,3 +1,13 @@
+## Attention
+===============
+This plugin is not longer maintained.
+As you can connect your spree store with aftership directly by using:
+
+https://www.aftership.com/apps/spree-V2
+
+No more plugin or file modified is needed.
+
+
 spree_aftership
 ==============
 This free extension automatically import any new tracking numbers from your Spree store to AfterShip.
