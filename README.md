@@ -1,5 +1,5 @@
 ## Attention
-===============
+---
 This plugin is not longer maintained.
 As you can connect your spree store with aftership directly by using:
 
